@@ -75,7 +75,7 @@ func Scan(root string, targets, excludes []string) ([]Candidate, []error) {
 			if len(excluded) > 0 {
 				return nil
 			}
-			if containsName(targetSet, name) {
+			if len(active) == 0 && containsName(targetSet, name) {
 				rel, relErr := filepath.Rel(resolved, path)
 				if relErr != nil {
 					scanErrors = append(scanErrors, relErr)

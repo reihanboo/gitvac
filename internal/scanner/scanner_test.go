@@ -66,6 +66,29 @@ func TestScanFindsAndSizesDirectories(t *testing.T) {
 	}
 }
 
+func TestScanDoesNotReturnCandidatesInsideCandidates(t *testing.T) {
+	root := t.TempDir()
+	parent := filepath.Join(root, "project", "node_modules")
+	nested := filepath.Join(parent, "target")
+	if err := os.MkdirAll(nested, 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(parent, "package.json"), []byte("12345"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(filepath.Join(nested, "cache"), []byte("abc"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	candidates, errs := Scan(root, []string{"node_modules", "target"}, nil)
+	if len(errs) != 0 {
+		t.Fatalf("unexpected scan errors: %v", errs)
+	}
+	if len(candidates) != 1 || candidates[0].Name != "node_modules" || candidates[0].Size != 8 {
+		t.Fatalf("unexpected candidates: %+v", candidates)
+	}
+}
+
 func TestScanExcludesDiscoveryButCountsContainedBytes(t *testing.T) {
 	root := t.TempDir()
 	candidate := filepath.Join(root, "project", "node_modules")
