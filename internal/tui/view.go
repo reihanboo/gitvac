@@ -17,7 +17,7 @@ var (
 
 func (m Model) View() tea.View {
 	var out strings.Builder
-	out.WriteString(titleStyle.Render("gitclean"))
+	out.WriteString(titleStyle.Render("gitvac"))
 	out.WriteString("  ")
 	out.WriteString(mutedStyle.Render(truncate(m.root, max(12, m.width-12))))
 	out.WriteString("\n")
