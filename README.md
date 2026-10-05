@@ -1,23 +1,28 @@
-# gitclean
+# gitvac
 
-A Windows-first terminal utility for finding disposable project directories below `C:\Users\reihan\git` and deleting only those you explicitly select.
+TUI tool for Windows to quickly find and clean up build junk/folders like `node_modules` under `C:\Users\reihan\git`. 
 
-## Run
+## Quick Start
 
 ```powershell
-go run ./cmd/gitclean
+go run ./cmd/gitvac
 
-go run ./cmd/gitclean --root C:\src
-go run ./cmd/gitclean --scan
+go run ./cmd/gitvac --scan
+
+go run ./cmd/gitvac --root C:\src
 ```
 
-Build the Windows executable with `go build -o gitclean.exe ./cmd/gitclean`. The executable is named `gitclean`; the Go module remains `gitvac`.
+To build a standalone binary:
 
-`--help` lists the CLI options. `--scan` prints matching paths and sizes without opening the TUI.
+```powershell
+go build -o gitvac.exe ./cmd/gitvac
+```
 
-## Configuration
+Run `gitvac --help` for all options.
 
-An optional JSON file can be placed at `%AppData%\gitvac\config.json` (the path returned by Go's `os.UserConfigDir()`). Defaults are used when the file does not exist. Example:
+## Config
+
+Optional config file lives at `%AppData%\gitvac\config.json`:
 
 ```json
 {
@@ -25,14 +30,15 @@ An optional JSON file can be placed at `%AppData%\gitvac\config.json` (the path 
   "targets": ["node_modules", ".venv", "venv", "__pycache__", ".pytest_cache", ".mypy_cache", "target", "dist", "build", ".next", ".svelte-kit", ".turbo"],
   "excludes": [".git", "vendor"]
 }
+
 ```
 
-`vendor` is not a default target. `--root` overrides the configured root.
+_Passing `--root` via CLI overrides the root setting here._
 
-## Controls
+## Keys
 
-- `j` / `k` or arrow keys: move
-- `space`: select or deselect
-- `a` / `n`: select all / none
-- `d`: open the deletion confirmation; `y` confirms, `n` or `esc` cancels
-- `q` / `ctrl+c`: quit
+- `j`/`k` or Up/Down to navigate
+- `Space` to toggle selection
+- `a`/`n` to select all / select none
+- `d` to delete selected (`y` to confirm, `n`/`Esc` to cancel)
+- `q`/`Ctrl+c` exit
