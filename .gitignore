@@ -1,0 +1,12 @@
+# Go build and test outputs
+/bin/
+/dist/
+/gitvac
+*.exe
+*.test
+*.out
+coverage.*
+
+# OS-generated files
+.DS_Store
+Thumbs.db
